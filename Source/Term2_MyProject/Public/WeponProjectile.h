@@ -6,31 +6,68 @@
 #include "GameFramework/Actor.h"
 #include "WeponProjectile.generated.h"
 
-
+class UStaticMeshComponent;
+class UProjectileMovementComponent;
 
 UCLASS()
 class TERM2_MYPROJECT_API AWeponProjectile : public AActor
 {
 	GENERATED_BODY()
 	
-		/** Sphere collision component */
-		UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
-		class USphereComponent* CollisionComp;
-
-	/** Projectile movement component */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
-		class UProjectileMovementComponent* ProjectileMovement;
-
-public:	
+public:
 	AWeponProjectile();
 
+	UFUNCTION(BlueprintCallable)
+		bool IsIdle() const { return State == EState::Idle; }
+
+		UFUNCTION(BlueprintCallable)
+		bool Pull(AActor* InActor);
+
+	UFUNCTION(BlueprintCallable)
+		void Launch(const FVector& InitialVelocity, AActor* Target = nullptr);
+
+	UFUNCTION(BlueprintCallable)
+		void Drop();
+
+	UFUNCTION(BlueprintCallable)
+		void ToggleHighlight(bool bIsOn);
+
+	//EFFECTS
+	//EEffectType GetEffectType();
+protected:
+	enum class EState
+	{
+		Idle,
+		Pull,
+		Attached,
+		Launch,
+		Dropped,
+	};
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+	virtual void NotifyHit(class UPrimitiveComponent* MyComp, AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
+
 	UFUNCTION()
-		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+		void ProjectileStop(const FHitResult& ImpactResult);
 
-	/** Returns CollisionComp subobject **/
-	FORCEINLINE class USphereComponent* GetCollisionComp() const { return CollisionComp; }
-	/** Returns ProjectileMovement subobject **/
-	FORCEINLINE class UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
+	UFUNCTION(BlueprintCallable)
+		bool SetHomingTarget(AActor* Target);
 
 
+	UPROPERTY(EditAnywhere)
+		UStaticMeshComponent* StaticMeshComponent;
+	UPROPERTY(EditAnywhere)
+		UProjectileMovementComponent* ProjectileMovementComponent;
+
+	EState State = EState::Idle;
+
+	UPROPERTY()
+		AActor* PullActor = nullptr;
+	//EFFECTS
+	//UPROPERTY(EditAnywhere, Category = "Effect")
+	//	EEffectType EffectType = EEffectType::None;
 };
+
+
