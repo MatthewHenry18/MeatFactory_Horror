@@ -8,7 +8,7 @@
 #include "AbstractionPlayerCharacter.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
-
+/*
 AWeponProjectile::AWeponProjectile()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -60,7 +60,7 @@ void AWeponProjectile::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPr
 			I->Execute_ApplyEffect(Other, EffectType, false);
 		}
 	}
-	*/
+	
 
 	if (PullActor && State == EState::Pull)
 	{
@@ -116,7 +116,9 @@ bool AWeponProjectile::Pull(AActor* InActor)
 	return false;
 }
 //call this functiion on actor 
-void AWeponProjectile::Launch(const FVector& InitialVelocity, AActor* Target /* = nullptr */) // can pass in a targrt
+void AWeponProjectile::Launch(const FVector& InitialVelocity, AActor* Target /* = nullptr */ // can pass in a targrt
+
+/*maoin
 {
 	if (State == EState::Pull || State == EState::Attached)
 	{
@@ -166,6 +168,8 @@ EEffectType AThrowableActor::GetEffectType()
 	return EffectType;
 }
 */
+
+/*
 bool AWeponProjectile::SetHomingTarget(AActor* Target)
 {
 	if (Target)
@@ -185,3 +189,4 @@ bool AWeponProjectile::SetHomingTarget(AActor* Target)
 
 	return false;
 }
+*/

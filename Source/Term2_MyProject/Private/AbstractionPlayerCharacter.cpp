@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "AbstractionPlayerCharacter.h"
-//tant
+/*tant
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "AbstractionPlayerController.h"
 #include "WeponProjectile.h"
-//
+*/
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/DamageType.h"
 #include "HealthComponent.h"
@@ -123,7 +123,7 @@ void AAbstractionPlayerCharacter::InteractionCancelRequested()
 {
 	OnInteractionCancelRequested.Broadcast();
 }
-
+/*
 //Throw Request 
 void AAbstractionPlayerCharacter::RequestThrowObject()
 {
@@ -205,7 +205,7 @@ void AAbstractionPlayerCharacter::RequestUseObject()
 	WeponProjectile->Destroy();
 	ResetThrowableObject();
 }
-*/
+
 
 //throwable outline
 void AAbstractionPlayerCharacter::ProcessTraceResult(const FHitResult& HitResult)
@@ -213,6 +213,7 @@ void AAbstractionPlayerCharacter::ProcessTraceResult(const FHitResult& HitResult
 	//called at specific moment in anim montage 
 //character hand a animation motage slot
 }
+*/
 
 //------------------------Item pickup-----------------------------//
 void AAbstractionPlayerCharacter::HandleItemCollected()
