@@ -8,7 +8,7 @@
 #include "AbstractionPlayerCharacter.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
-/*
+
 AWeponProjectile::AWeponProjectile()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -27,7 +27,7 @@ void AWeponProjectile::BeginPlay()
 	Super::BeginPlay();
 	if (HasAuthority())
 	{
-		ProjectileMovementComponent->OnProjectileStop.AddDynamic(this, &AThrowableActor::ProjectileStop);
+		ProjectileMovementComponent->OnProjectileStop.AddDynamic(this, &AWeponProjectile::ProjectileStop);
 	}
 }
 
@@ -35,7 +35,7 @@ void AWeponProjectile::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	if (HasAuthority())
 	{
-		ProjectileMovementComponent->OnProjectileStop.RemoveDynamic(this, &AThrowableActor::ProjectileStop);
+		ProjectileMovementComponent->OnProjectileStop.RemoveDynamic(this, &AWeponProjectile::ProjectileStop);
 	}
 	Super::EndPlay(EndPlayReason);
 }
@@ -51,7 +51,8 @@ void AWeponProjectile::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPr
 	{
 		return;
 	}
-	/* EFFECTS
+	// EFFECTS
+	/*
 	if (State == EState::Launch)
 	{
 		IInteractInterface* I = Cast<IInteractInterface>(Other);
@@ -84,6 +85,7 @@ void AWeponProjectile::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPr
 			}
 		}
 	}
+	*/
 
 	ProjectileMovementComponent->HomingTargetComponent = nullptr;
 	PullActor = nullptr;
@@ -116,9 +118,7 @@ bool AWeponProjectile::Pull(AActor* InActor)
 	return false;
 }
 //call this functiion on actor 
-void AWeponProjectile::Launch(const FVector& InitialVelocity, AActor* Target /* = nullptr */ // can pass in a targrt
-
-/*maoin
+void AWeponProjectile::Launch(const FVector& InitialVelocity, AActor* Target )// can pass in a targrt
 {
 	if (State == EState::Pull || State == EState::Attached)
 	{
@@ -162,14 +162,15 @@ void AWeponProjectile::ToggleHighlight(bool bIsOn)
 {
 	StaticMeshComponent->SetRenderCustomDepth(bIsOn);
 }
-/* EFFECTS
-EEffectType AThrowableActor::GetEffectType()
-{
-	return EffectType;
-}
-*/
+//EFFECTS
 
-/*
+//EEffectType AThrowableActor::GetEffectType()
+//{
+//	return EffectType;
+//}
+
+
+
 bool AWeponProjectile::SetHomingTarget(AActor* Target)
 {
 	if (Target)
@@ -189,4 +190,4 @@ bool AWeponProjectile::SetHomingTarget(AActor* Target)
 
 	return false;
 }
-*/
+

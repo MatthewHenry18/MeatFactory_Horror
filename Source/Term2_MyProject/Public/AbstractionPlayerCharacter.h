@@ -13,9 +13,10 @@ class UDamageHandlerComponent;
 class UHealthComponent;
 class UParticleSystemComponent;
 
-//class AWeponProjectile;
-//Throwing enum
-/*
+class AWeponProjectile;
+
+//Throwing enum G
+
 UENUM(BlueprintType)
 enum class ECharacterThrowState : uint8
 {
@@ -25,7 +26,7 @@ enum class ECharacterThrowState : uint8
 	Attached		UMETA(DisplayName = "Attached"),
 	Throwing		UMETA(DisplayName = "Throwing"),
 };
-*/
+
 //these are input bindings
 DECLARE_MULTICAST_DELEGATE(FInteractionStartRequest);
 DECLARE_MULTICAST_DELEGATE(FInteractionCancelRequest);
@@ -74,28 +75,28 @@ public:
 	FInteractionCancelRequest OnInteractionCancelRequested;
 
 	//THROW BINDINGS 
-/*
+
 	//setting the triggers to bindings
-//	void RequestThrowObject();
-//	void RequestPullObject(AWeponProjectile* InWeponProjectile);
-//	void RequestStopPullObject();
-//	void ResetThrowableObject();
+	void RequestThrowObject();
+	void RequestPullObject(AWeponProjectile* InWeponProjectile);
+	void RequestStopPullObject();
+	void ResetThrowableObject();
 
-	//void RequestUseObject();
+	void RequestUseObject();
 
-//	void OnThrowableAttached(AWeponProjectile* InWeponProjectile);
+	void OnThrowableAttached(AWeponProjectile* InWeponProjectile);
+//
+	bool CanThrowObject() const { return CharacterThrowState == ECharacterThrowState::Attached; }
 
-//	bool CanThrowObject() const { return CharacterThrowState == ECharacterThrowState::Attached; }
+	UFUNCTION(BlueprintPure)
+		bool IsPullingObject() const { return CharacterThrowState == ECharacterThrowState::RequestingPull || CharacterThrowState == ECharacterThrowState::Pulling; }
 
-	//UFUNCTION(BlueprintPure)
-	//	bool IsPullingObject() const { return CharacterThrowState == ECharacterThrowState::RequestingPull || CharacterThrowState == ECharacterThrowState::Pulling; }
+	UFUNCTION(BlueprintPure)
+		bool IsThrowing() const { return CharacterThrowState == ECharacterThrowState::Throwing; }
 
-//	UFUNCTION(BlueprintPure)
-	//	bool IsThrowing() const { return CharacterThrowState == ECharacterThrowState::Throwing; }
-
-	//UFUNCTION(BlueprintPure)
-	//	ECharacterThrowState GetCharacterThrowState() const { return CharacterThrowState; }
-	*/
+	UFUNCTION(BlueprintPure)
+		ECharacterThrowState GetCharacterThrowState() const { return CharacterThrowState; }
+//	
 
 	//////------Door Interaction-------/////
 	UFUNCTION(BlueprintImplementableEvent)
@@ -117,17 +118,17 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		const float GetCurrentHealth() const;
-
+	//
 	//UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_CharacterThrowState, Category = "Throw")
-		//UPROPERTY(VisibleAnywhere, replicated, Category = "Throw")
-	//	ECharacterThrowState CharacterThrowState = ECharacterThrowState::None;
-	
+		UPROPERTY(VisibleAnywhere, /*replicated, */ Category = "Throw")
+		ECharacterThrowState CharacterThrowState = ECharacterThrowState::None;
+	//
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	//throwable outline
-	//void ProcessTraceResult(const FHitResult& HitResult);
+	void ProcessTraceResult(const FHitResult& HitResult);
 	///////////////////////////////////////////////////////////////////here
 
 	void OnDeath(bool IsFellOut);
@@ -157,19 +158,19 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Force Feedback")
 		float ForceFeedbackDuration = 1.0f;
 
-	/*
+	
 	///////* 181 Tanctrum Character Base
 	bool bIsStunned = false;
 	bool bIsSprinting = false;
 
 	float MaxWalkSpeed = 0.0f;
 
-
+	//
 	UPROPERTY(EditAnywhere, Category = "Throw", meta = (ClampMin = "0.0", Unit = "ms"))
 		float ThrowSpeed = 2000.0f;
 	//private
 	UPROPERTY()
 		AWeponProjectile* WeponProjectile;
-	*/
+	//
 
 };

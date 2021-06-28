@@ -15,8 +15,8 @@ class TERM2_MYPROJECT_API AWeponProjectile : public AActor
 	GENERATED_BODY()
 	
 public:
-	//AWeponProjectile();
-	/*
+	AWeponProjectile();
+	
 
 	UFUNCTION(BlueprintCallable)
 		bool IsIdle() const { return State == EState::Idle; }
@@ -69,7 +69,7 @@ protected:
 	//EFFECTS
 	//UPROPERTY(EditAnywhere, Category = "Effect")
 	//	EEffectType EffectType = EEffectType::None;
-	*/
+	
 };
 
 

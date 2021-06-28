@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "AbstractionPlayerCharacter.h"
-/*tant
-#include "GameFramework/CharacterMovementComponent.h"
-#include "Kismet/GameplayStatics.h"
-#include "AbstractionPlayerController.h"
+//tantrum
+//#include "GameFramework/CharacterMovementComponent.h"
+//#include "Kismet/GameplayStatics.h"
+//#include "AbstractionPlayerController.h"
 #include "WeponProjectile.h"
-*/
+//
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/DamageType.h"
 #include "HealthComponent.h"
@@ -15,6 +15,7 @@
 #include "DamageHandlerComponent.h"
 
 // Sets default values
+
 AAbstractionPlayerCharacter::AAbstractionPlayerCharacter(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
@@ -25,7 +26,14 @@ AAbstractionPlayerCharacter::AAbstractionPlayerCharacter(const FObjectInitialize
 
 	ParticleSystemComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particle System"));
 	ParticleSystemComponent->SetupAttachment(RootComponent);
+	//
+	//bReplicates = true;
+	//SetReplicateMovement(true);
+	//
 }
+
+
+
 
 // Called when the game starts or when spawned
 void AAbstractionPlayerCharacter::BeginPlay()
@@ -123,11 +131,12 @@ void AAbstractionPlayerCharacter::InteractionCancelRequested()
 {
 	OnInteractionCancelRequested.Broadcast();
 }
-/*
+
 //Throw Request 
+
 void AAbstractionPlayerCharacter::RequestThrowObject()
 {
-	if (CanThrowObject)
+	if (CanThrowObject()) //()
 	{
 		CharacterThrowState = ECharacterThrowState::Throwing;
 
@@ -198,10 +207,10 @@ void AAbstractionPlayerCharacter::OnThrowableAttached(AWeponProjectile* InWeponP
 	MoveIgnoreActorAdd(WeponProjectile);
 	//InThrowableActor->ToggleHighlight(false);
 }
-/*
+
 void AAbstractionPlayerCharacter::RequestUseObject()
 {
-	ApplyEffect_Implementation(WeponProjectile->GetEffectType(), true);
+	//ApplyEffect_Implementation(WeponProjectile->GetEffectType(), true);
 	WeponProjectile->Destroy();
 	ResetThrowableObject();
 }
@@ -213,7 +222,7 @@ void AAbstractionPlayerCharacter::ProcessTraceResult(const FHitResult& HitResult
 	//called at specific moment in anim montage 
 //character hand a animation motage slot
 }
-*/
+
 
 //------------------------Item pickup-----------------------------//
 void AAbstractionPlayerCharacter::HandleItemCollected()
