@@ -78,7 +78,10 @@ public:
 
 	//setting the triggers to bindings
 	void RequestThrowObject();
-	void RequestPullObject(AWeponProjectile* InWeponProjectile);
+	//void RequestPullObject(AWeponProjectile* InWeponProjectile);
+	void RequestPullObject();
+
+
 	void RequestStopPullObject();
 	void ResetThrowableObject();
 
@@ -96,6 +99,10 @@ public:
 
 	UFUNCTION(BlueprintPure)
 		ECharacterThrowState GetCharacterThrowState() const { return CharacterThrowState; }
+
+	//where throw happens 
+	//UFUNCTION()
+	//	void OnNotifyBeginReceived(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
 //	
 
 	//////------Door Interaction-------/////

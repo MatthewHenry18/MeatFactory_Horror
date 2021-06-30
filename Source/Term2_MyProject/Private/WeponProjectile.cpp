@@ -61,10 +61,13 @@ void AWeponProjectile::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPr
 			I->Execute_ApplyEffect(Other, EffectType, false);
 		}
 	}
-	
+	*/
 
 	if (PullActor && State == EState::Pull)
 	{
+		//
+		//Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit)
+			//
 		if (AAbstractionPlayerCharacter* AbstractionPlayerCharacter = Cast<AAbstractionPlayerCharacter>(PullActor))
 		{
 
@@ -85,7 +88,7 @@ void AWeponProjectile::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPr
 			}
 		}
 	}
-	*/
+	
 
 	ProjectileMovementComponent->HomingTargetComponent = nullptr;
 	PullActor = nullptr;
@@ -182,6 +185,7 @@ bool AWeponProjectile::SetHomingTarget(AActor* Target)
 				ProjectileMovementComponent->SetUpdatedComponent(ThrowableSceneComponent);
 				ProjectileMovementComponent->Activate(true);
 				ProjectileMovementComponent->HomingTargetComponent = TWeakObjectPtr<USceneComponent>(SceneComponent);
+				//should be exposed for easy adjustment
 				ProjectileMovementComponent->Velocity = FVector(0.0f, 0.0f, 1000.0f);
 				return true;
 			}

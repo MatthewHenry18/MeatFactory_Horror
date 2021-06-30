@@ -4,7 +4,7 @@
 //tantrum
 //#include "GameFramework/CharacterMovementComponent.h"
 //#include "Kismet/GameplayStatics.h"
-//#include "AbstractionPlayerController.h"
+#include "AbstractionPlayerController.h"
 #include "WeponProjectile.h"
 //
 #include "GameFramework/PlayerController.h"
@@ -136,11 +136,10 @@ void AAbstractionPlayerCharacter::InteractionCancelRequested()
 
 void AAbstractionPlayerCharacter::RequestThrowObject()
 {
-	if (CanThrowObject()) //()
+	if (CanThrowObject())
 	{
 		CharacterThrowState = ECharacterThrowState::Throwing;
-
-		//ignore collisions otherwise the throwable object hits the player capsule and doesn't travel in the desired direction
+		//ignore collisions otherwise throwable hit player capsule
 		if (WeponProjectile->GetRootComponent())
 		{
 			UPrimitiveComponent* RootPrimitiveComponent = Cast<UPrimitiveComponent>(WeponProjectile->GetRootComponent());
@@ -149,34 +148,32 @@ void AAbstractionPlayerCharacter::RequestThrowObject()
 				RootPrimitiveComponent->IgnoreActorWhenMoving(this, true);
 			}
 		}
-		//const FVector& Direction = GetMesh()->GetSocketRotation(TEXT("ObjectAttach")).Vector() * -ThrowSpeed;
+		//const FVector& Direction = GetMesh()->GetSocketRotation(TEXT("ObjectAttach")).Vector() * ThrowSpeed;
 		const FVector& Direction = GetActorForwardVector() * ThrowSpeed;
 		WeponProjectile->Launch(Direction);
-
-		//Debug Draw
-		//if (CVarDisplayThrowVelocity->GetBool())
-		//{
-		//	const FVector& Start = GetMesh()->GetSocketLocation(TEXT("ObjectAttach"));
-			//DrawDebugLine(GetWorld(), Start, Start + Direction, FColor::Red, false, 5.0f);
-		//}
 	}
+	else
+	{
+		ResetThrowableObject();
+	}
+	
 }
 
 //Pull Request
-void AAbstractionPlayerCharacter::RequestPullObject(AWeponProjectile* InWeponProjectile)
+void AAbstractionPlayerCharacter::RequestPullObject()
 {
-	//make sure we are in idle
-	if (!bIsStunned && CharacterThrowState == ECharacterThrowState::None)
+	//stop pulling  if running
+	if (GetVelocity().SizeSquared() < 100.0f)
 	{
-		CharacterThrowState = ECharacterThrowState::RequestingPull;
-		if (InWeponProjectile && InWeponProjectile->Pull(this))
+		if (WeponProjectile && WeponProjectile->Pull(this))
 		{
 			CharacterThrowState = ECharacterThrowState::Pulling;
-			InWeponProjectile = InWeponProjectile;
-			WeponProjectile->ToggleHighlight(false);
+			WeponProjectile = nullptr;
 		}
+
 	}
 }
+
 //stop pulling request
 void AAbstractionPlayerCharacter::RequestStopPullObject()
 {
@@ -205,7 +202,7 @@ void AAbstractionPlayerCharacter::OnThrowableAttached(AWeponProjectile* InWeponP
 	CharacterThrowState = ECharacterThrowState::Attached;
 	WeponProjectile = InWeponProjectile;
 	MoveIgnoreActorAdd(WeponProjectile);
-	//InThrowableActor->ToggleHighlight(false);
+	InWeponProjectile->ToggleHighlight(false);
 }
 
 void AAbstractionPlayerCharacter::RequestUseObject()
@@ -215,6 +212,27 @@ void AAbstractionPlayerCharacter::RequestUseObject()
 	ResetThrowableObject();
 }
 
+//void AAbstractionPlayerCharacter::OnNotifyBeginReceived(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
+//{
+//	//ignore collisions otherwise throwable hit player capsule
+//	if (WeponProjectile->GetRootComponent())
+///		UPrimitiveComponent* RootPrimitiveComponent = Cast<UPrimitiveComponent>(WeponProjectile->GetRootComponent());
+//		if (RootPrimitiveComponent)
+//		{
+//			RootPrimitiveComponent->IgnoreActorWhenMoving(this, true);
+//		}
+//	}
+	//const FVector& Direction = GetMesh()->GetSocketRotation(TEXT("ObjectAttach")).Vector() * ThrowSpeed;
+//	const FVector& Direction = GetActorForwardVector() * ThrowSpeed;
+//	WeponProjectile->Launch(Direction);
+
+	//Debug
+	//if (CVarDisplayThrowVelocity->GetBool())
+	//{
+	//	const FVector& Start = GetMesh()->GetSocketLocation(TEXT("ObjectAttach"));
+	//	DrawDebugLine(GetWorld(), Start, Start + Direction, FColor::Red, false, 5.0f);
+	//}
+//}
 
 //throwable outline
 void AAbstractionPlayerCharacter::ProcessTraceResult(const FHitResult& HitResult)

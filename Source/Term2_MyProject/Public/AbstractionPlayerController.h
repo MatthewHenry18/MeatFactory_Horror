@@ -20,14 +20,25 @@ public:
 	void RequestLookUp(float AxisValue);
 	void RequestTurn(float AxisValue);
 	void RequestJump();
+	//throw and pull
+	void RequestPullObject();
+	void RequestStopPullObject();
+
+	void RequestThrowObject(float AxisValue);
+
+
+
 
 	UPROPERTY(EditAnywhere, Category = "Look")
 		float BaseLookUpRate = 90.0f;
 
 	UPROPERTY(EditAnywhere, Category = "Look")
 		float BaseTurnRate = 90.0f;
-
-
+	//
+	UPROPERTY(EditAnywhere, Category = "Input")
+		float FlickThreshold = 0.75;
+	float LastAxis = 0.0f;
+	//
 
 	//AAbstractionPlayerController() {}
 
