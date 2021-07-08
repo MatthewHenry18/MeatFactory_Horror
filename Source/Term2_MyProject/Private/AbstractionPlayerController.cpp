@@ -22,10 +22,10 @@ void AAbstractionPlayerController::SetupInputComponent()
 		InputComponent->BindAxis(TEXT("Turn"), this, &AAbstractionPlayerController::RequestTurn);
 
 		//pull + THrow
-		InputComponent->BindAction(TEXT("PullObject"), EInputEvent::IE_Pressed, this, &AAbstractionPlayerController::RequestPullObject);
-		InputComponent->BindAction(TEXT("PullObject"), EInputEvent::IE_Released, this, &AAbstractionPlayerController::RequestStopPullObject);
+		//InputComponent->BindAction(TEXT("PullObject"), EInputEvent::IE_Pressed, this, &AAbstractionPlayerController::RequestPullObject);
+		//InputComponent->BindAction(TEXT("PullObject"), EInputEvent::IE_Released, this, &AAbstractionPlayerController::RequestStopPullObject);
 
-		InputComponent->BindAxis(TEXT("ThrowObject"), this, &AAbstractionPlayerController::RequestThrowObject);
+		//InputComponent->BindAxis(TEXT("ThrowObject"), this, &AAbstractionPlayerController::RequestThrowObject);
 	}
 }
 
@@ -52,25 +52,40 @@ void AAbstractionPlayerController::RequestMoveRight(float AxisValue)
 void AAbstractionPlayerController::RequestLookUp(float AxisValue)
 {
 	AddPitchInput(AxisValue * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+	
+	if (AAbstractionPlayerCharacter* AbstractionPlayerCharacter = Cast<AAbstractionPlayerCharacter>(GetCharacter()))
+	{
+
+		AbstractionPlayerCharacter->HasLookedUp();
+	}
 }
 
 void AAbstractionPlayerController::RequestTurn(float AxisValue)
 {
 	AddYawInput(AxisValue * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+
+	if (AAbstractionPlayerCharacter* AbstractionPlayerCharacter = Cast<AAbstractionPlayerCharacter>(GetCharacter()))
+	{
+
+		AbstractionPlayerCharacter->HasTurned();
+	}
 }
 
 void AAbstractionPlayerController::RequestJump()
 {
+
 	if (GetCharacter())
 	{
 		GetCharacter()->Jump();
 	}
 }
-
+/*
 void AAbstractionPlayerController::RequestPullObject()
 {
+
 	if (AAbstractionPlayerCharacter* AbstractionPlayerCharacter = Cast<AAbstractionPlayerCharacter>(GetCharacter()))
 	{
+
 		AbstractionPlayerCharacter->RequestPullObject();
 	}
 }
@@ -105,3 +120,4 @@ void AAbstractionPlayerController::RequestThrowObject(float AxisValue)
 	}
 	//on notify begin recieved 
 }
+*/

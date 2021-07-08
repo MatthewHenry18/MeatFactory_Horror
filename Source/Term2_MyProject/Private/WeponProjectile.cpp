@@ -17,11 +17,11 @@ AWeponProjectile::AWeponProjectile()
 	SetReplicateMovement(true);
 
 	//creating the components we are going to be using (mesh and projectile) -> h file 
-	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
-	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovementComponent");
-	RootComponent = StaticMeshComponent;
+	//StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
+	//ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovementComponent");
+	//RootComponent = StaticMeshComponent;
 }
-
+/*
 void AWeponProjectile::BeginPlay()
 {
 	Super::BeginPlay();
@@ -62,12 +62,10 @@ void AWeponProjectile::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPr
 		}
 	}
 	*/
-
+/*
 	if (PullActor && State == EState::Pull)
 	{
-		//
 		//Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit)
-			//
 		if (AAbstractionPlayerCharacter* AbstractionPlayerCharacter = Cast<AAbstractionPlayerCharacter>(PullActor))
 		{
 
@@ -75,6 +73,7 @@ void AWeponProjectile::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPr
 			{
 				//simulating attach state
 				AttachToComponent(AbstractionPlayerCharacter->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("ObjectAttach"));
+				//AttachToComponent(AbstractionPlayerCharacter->GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("ObjectAttach"));
 				SetOwner(AbstractionPlayerCharacter);
 				ProjectileMovementComponent->Deactivate();
 				State = EState::Attached;
@@ -133,16 +132,17 @@ void AWeponProjectile::Launch(const FVector& InitialVelocity, AActor* Target )//
 
 		State = EState::Launch;
 
+		//if want a homing target
 		if (Target)
 		{
-			if (USceneComponent* SceneComponent = Cast<USceneComponent>(Target->GetComponentByClass(USceneComponent::StaticClass())))
+			if(USceneComponent* SceneComponent = Cast<USceneComponent>(Target->GetComponentByClass(USceneComponent::StaticClass())))
 			{
 				ProjectileMovementComponent->HomingTargetComponent = TWeakObjectPtr<USceneComponent>(SceneComponent);
 				return;
 			}
 		}
-
-		ProjectileMovementComponent->Velocity = InitialVelocity;
+		
+		ProjectileMovementComponent->Velocity = InitialVelocity + 2000;
 	}
 }
 
@@ -163,7 +163,7 @@ void AWeponProjectile::Drop()
 
 void AWeponProjectile::ToggleHighlight(bool bIsOn)
 {
-	StaticMeshComponent->SetRenderCustomDepth(bIsOn);
+	//StaticMeshComponent->SetRenderCustomDepth(bIsOn);
 }
 //EFFECTS
 
@@ -195,3 +195,4 @@ bool AWeponProjectile::SetHomingTarget(AActor* Target)
 	return false;
 }
 
+*/

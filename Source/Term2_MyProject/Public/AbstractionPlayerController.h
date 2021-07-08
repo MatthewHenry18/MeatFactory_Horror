@@ -2,9 +2,13 @@
 
 #pragma once
 
+
+
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "AbstractionPlayerController.generated.h"
+
+
 
 
 UCLASS()
@@ -21,10 +25,10 @@ public:
 	void RequestTurn(float AxisValue);
 	void RequestJump();
 	//throw and pull
-	void RequestPullObject();
-	void RequestStopPullObject();
+	//void RequestPullObject();
+	//void RequestStopPullObject();
 
-	void RequestThrowObject(float AxisValue);
+	//void RequestThrowObject(float AxisValue);
 
 
 
@@ -35,10 +39,11 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Look")
 		float BaseTurnRate = 90.0f;
 	//
-	UPROPERTY(EditAnywhere, Category = "Input")
-		float FlickThreshold = 0.75;
-	float LastAxis = 0.0f;
+	//UPROPERTY(EditAnywhere, Category = "Input")
+	//	float FlickThreshold = 0.75;
+	//float LastAxis = 0.0f;
 	//
+		
 
 	//AAbstractionPlayerController() {}
 

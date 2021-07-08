@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+//#include "InteractInterface.h"
 //#include "IDetailTreeNode.h"
 #include "GameFramework/Character.h"
 #include "AbstractionPlayerCharacter.generated.h"
@@ -13,10 +14,10 @@ class UDamageHandlerComponent;
 class UHealthComponent;
 class UParticleSystemComponent;
 
-class AWeponProjectile;
+//class AWeponProjectile;
 
 //Throwing enum G
-
+/*
 UENUM(BlueprintType)
 enum class ECharacterThrowState : uint8
 {
@@ -26,24 +27,22 @@ enum class ECharacterThrowState : uint8
 	Attached		UMETA(DisplayName = "Attached"),
 	Throwing		UMETA(DisplayName = "Throwing"),
 };
-
+*/
 //these are input bindings
 DECLARE_MULTICAST_DELEGATE(FInteractionStartRequest);
 DECLARE_MULTICAST_DELEGATE(FInteractionCancelRequest);
 
-UCLASS()
-class TERM2_MYPROJECT_API AAbstractionPlayerCharacter : public ACharacter
+UCLASS()                                                                  //to include interface to class
+class TERM2_MYPROJECT_API AAbstractionPlayerCharacter : public ACharacter//, public IInteractInterface
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	//
-	//AAbstractionPlayerCharacter();
-
 	/*Default UObject Constructor*/
 	AAbstractionPlayerCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-	
+	//AAbstractionPlayerCharacter();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -75,11 +74,13 @@ public:
 	FInteractionCancelRequest OnInteractionCancelRequested;
 
 	//THROW BINDINGS 
-
+/*
 	//setting the triggers to bindings
 	void RequestThrowObject();
-	//void RequestPullObject(AWeponProjectile* InWeponProjectile);
+	void RequestPullObject(AWeponProjectile* InWeponProjectile);
 	void RequestPullObject();
+
+	void ProcessTraceResult(const FHitResult& HitResult);
 
 
 	void RequestStopPullObject();
@@ -103,7 +104,15 @@ public:
 	//where throw happens 
 	//UFUNCTION()
 	//	void OnNotifyBeginReceived(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
-//	
+	*/
+	//	
+
+	//Controller Has Look/turned 
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void HasLookedUp();
+	UFUNCTION(BlueprintImplementableEvent)
+		void HasTurned();
 
 	//////------Door Interaction-------/////
 	UFUNCTION(BlueprintImplementableEvent)
@@ -127,16 +136,12 @@ public:
 		const float GetCurrentHealth() const;
 	//
 	//UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_CharacterThrowState, Category = "Throw")
-		UPROPERTY(VisibleAnywhere, /*replicated, */ Category = "Throw")
-		ECharacterThrowState CharacterThrowState = ECharacterThrowState::None;
-	//
+	//	UPROPERTY(VisibleAnywhere, /*replicated, */ Category = "Throw")
+	//	ECharacterThrowState CharacterThrowState = ECharacterThrowState::None;
+	///
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	//throwable outline
-	void ProcessTraceResult(const FHitResult& HitResult);
-	///////////////////////////////////////////////////////////////////here
 
 	void OnDeath(bool IsFellOut);
 
@@ -166,18 +171,30 @@ protected:
 		float ForceFeedbackDuration = 1.0f;
 
 	
-	///////* 181 Tanctrum Character Base
-	bool bIsStunned = false;
-	bool bIsSprinting = false;
+	
+	//bool bIsStunned = false;
+	//bool bIsSprinting = false;
 
 	float MaxWalkSpeed = 0.0f;
 
 	//
 	UPROPERTY(EditAnywhere, Category = "Throw", meta = (ClampMin = "0.0", Unit = "ms"))
 		float ThrowSpeed = 2000.0f;
-	//private
-	UPROPERTY()
-		AWeponProjectile* WeponProjectile;
-	//
 
+
+	private:
+	//UPROPERTY()
+	//	AWeponProjectile* WeponProjectile;
+
+
+	//Expective Implementation bc BLueprint Native
+	//void ApplyEffect_Implementation(EEffectType EffectType, bool bIsBuff) override;
+
+	//void EndEffect();
+
+	//bool bIsUnderEffect = false;
+	//bool bIsEffectBuff = false;
+
+	//float DefaultEffectCooldown = 5.0f;
+	//float EffectCoolDOwn = 0.0f;
 };

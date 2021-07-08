@@ -2,8 +2,11 @@
 
 #include "AbstractionPlayerCharacter.h"
 //tantrum
-//#include "GameFramework/CharacterMovementComponent.h"
-//#include "Kismet/GameplayStatics.h"
+//
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
+//
 #include "AbstractionPlayerController.h"
 #include "WeponProjectile.h"
 //
@@ -13,6 +16,13 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Components/InputComponent.h"
 #include "DamageHandlerComponent.h"
+
+//debuf trace
+static TAutoConsoleVariable<bool> CVarDisplayTrace(
+	TEXT("Tantrum.Character.Debug.DisplayTrace"),
+	false,
+	TEXT("Display Trace"),
+	ECVF_Default);
 
 // Sets default values
 
@@ -32,13 +42,14 @@ AAbstractionPlayerCharacter::AAbstractionPlayerCharacter(const FObjectInitialize
 	//
 }
 
-
-
-
 // Called when the game starts or when spawned
 void AAbstractionPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();	
+
+	//InteractInterface Effects
+	//EffectCooldown = DefaultEffectCooldown;
+
 	//use possess/unpossess
 	//assigne player controller on begin play
 	PC = GetWorld()->GetFirstPlayerController();
@@ -48,6 +59,22 @@ void AAbstractionPlayerCharacter::BeginPlay()
 void AAbstractionPlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	//Interface Effects /////////////
+	//if (bIsUnderEffect)
+	//{
+	//	if (EffectCoolDOwn > 0)
+	//	{
+	//		EffectCoolDOwn -= DeltaTime;
+	//	}
+	//	else
+	//	{
+	//		bIsUnderEffect = false;
+	//		EffectCoolDOwn = DefaultEffectCooldown;
+	//		EndEffect();
+	//	}
+	//}
+	//////////////////////////////////
 }
 
 // Called to bind functionality to input
@@ -132,12 +159,15 @@ void AAbstractionPlayerCharacter::InteractionCancelRequested()
 	OnInteractionCancelRequested.Broadcast();
 }
 
-//Throw Request 
+//Has Looked and turned -> BP Implemented
 
+//Throw Request 
+/*
 void AAbstractionPlayerCharacter::RequestThrowObject()
 {
 	if (CanThrowObject())
 	{
+
 		CharacterThrowState = ECharacterThrowState::Throwing;
 		//ignore collisions otherwise throwable hit player capsule
 		if (WeponProjectile->GetRootComponent())
@@ -148,9 +178,9 @@ void AAbstractionPlayerCharacter::RequestThrowObject()
 				RootPrimitiveComponent->IgnoreActorWhenMoving(this, true);
 			}
 		}
-		//const FVector& Direction = GetMesh()->GetSocketRotation(TEXT("ObjectAttach")).Vector() * ThrowSpeed;
-		const FVector& Direction = GetActorForwardVector() * ThrowSpeed;
-		WeponProjectile->Launch(Direction);
+		const FVector& Direction = GetMesh()->GetSocketRotation(TEXT("ObjectAttach")).Vector() * ThrowSpeed;
+		//const FVector& Direction = GetActorForwardVector() * ThrowSpeed;
+		WeponProjectile->Launch(Direction);  // needs an in actor if want to use target
 	}
 	else
 	{
@@ -162,15 +192,68 @@ void AAbstractionPlayerCharacter::RequestThrowObject()
 //Pull Request
 void AAbstractionPlayerCharacter::RequestPullObject()
 {
+	CharacterThrowState = ECharacterThrowState::RequestingPull;
+	FVector StartPos = GetActorLocation();
+	FVector EndPos = StartPos + (GetActorForwardVector() * 1000.0f);
+
+	EDrawDebugTrace::Type DebugTrace = CVarDisplayTrace->GetBool() ? EDrawDebugTrace::ForOneFrame : EDrawDebugTrace::None;
+	FHitResult HitResult;
+	UKismetSystemLibrary::SphereTraceSingle(GetWorld(), StartPos, EndPos, 70.0f, UEngineTypes::ConvertToTraceType(ECollisionChannel::ECC_Visibility), false, TArray<AActor*>(), DebugTrace, HitResult, true);
+	//
+	ProcessTraceResult(HitResult);
+
+}
+
+void AAbstractionPlayerCharacter::RequestPullObject(AWeponProjectile* InWeponProjectile)
+{	
 	//stop pulling  if running
 	if (GetVelocity().SizeSquared() < 100.0f)
 	{
 		if (WeponProjectile && WeponProjectile->Pull(this))
 		{
+			if (InWeponProjectile && InWeponProjectile->Pull(this))
+			{
+				CharacterThrowState = ECharacterThrowState::Pulling;
+				WeponProjectile = InWeponProjectile;
+				//WeponProjectile->ToggleHighlight(false);
+			}		
 			CharacterThrowState = ECharacterThrowState::Pulling;
 			WeponProjectile = nullptr;
 		}
+	}
+}
 
+void AAbstractionPlayerCharacter::ProcessTraceResult(const FHitResult& HitResult)
+{
+	//check if there was an existing throwable actor
+	//remove the hightlight to avoid wrong feedback 
+	AWeponProjectile* HitWeponProjectile = HitResult.bBlockingHit ? Cast<AWeponProjectile>(HitResult.GetActor()) : nullptr;
+	const bool IsSameActor = (WeponProjectile == HitWeponProjectile);
+	const bool IsValidTarget = HitWeponProjectile && HitWeponProjectile->IsIdle();
+
+	//clean up old actor
+	if (WeponProjectile && (!IsValidTarget || !IsSameActor))
+	{
+		WeponProjectile->ToggleHighlight(false);
+		WeponProjectile = nullptr;
+	}
+	//no target, early out
+	if (!IsValidTarget)
+	{
+		return;
+	}
+	//new target, set the variable and proceed
+	if (!IsSameActor)
+	{
+		WeponProjectile = HitWeponProjectile;
+		WeponProjectile->ToggleHighlight(true);
+	}
+	if (CharacterThrowState == ECharacterThrowState::RequestingPull)
+	{
+			RequestPullObject(WeponProjectile);
+			
+			WeponProjectile->ToggleHighlight(false);
+			//ThrowableActor = nullptr;
 	}
 }
 
@@ -199,14 +282,17 @@ void AAbstractionPlayerCharacter::ResetThrowableObject()
 
 void AAbstractionPlayerCharacter::OnThrowableAttached(AWeponProjectile* InWeponProjectile)
 {
+
 	CharacterThrowState = ECharacterThrowState::Attached;
 	WeponProjectile = InWeponProjectile;
 	MoveIgnoreActorAdd(WeponProjectile);
-	InWeponProjectile->ToggleHighlight(false);
+
+	//InWeponProjectile->ToggleHighlight(false);
 }
 
 void AAbstractionPlayerCharacter::RequestUseObject()
 {
+
 	//ApplyEffect_Implementation(WeponProjectile->GetEffectType(), true);
 	WeponProjectile->Destroy();
 	ResetThrowableObject();
@@ -234,12 +320,7 @@ void AAbstractionPlayerCharacter::RequestUseObject()
 	//}
 //}
 
-//throwable outline
-void AAbstractionPlayerCharacter::ProcessTraceResult(const FHitResult& HitResult)
-{
-	//called at specific moment in anim montage 
-//character hand a animation motage slot
-}
+*/
 
 
 //------------------------Item pickup-----------------------------//
@@ -253,3 +334,14 @@ void AAbstractionPlayerCharacter::HandleItemCollected()
 
 	ItemCollected();
 }
+
+//interact interface Effect 
+//void AAbstractionPlayerCharacter::ApplyEffect_Implementation(EEffectType EffectType, bool bIsBuff)
+//{
+
+//}
+
+//void AAbstractionPlayerCharacter::EndEffect()
+//{
+	
+//}
