@@ -14,20 +14,7 @@ class UDamageHandlerComponent;
 class UHealthComponent;
 class UParticleSystemComponent;
 
-//class AWeponProjectile;
 
-//Throwing enum G
-/*
-UENUM(BlueprintType)
-enum class ECharacterThrowState : uint8
-{
-	None			UMETA(DisplayName = "None"),
-	RequestingPull	UMETA(DisplayName = "RequestingPull"),
-	Pulling			UMETA(DisplayName = "Pulling"),
-	Attached		UMETA(DisplayName = "Attached"),
-	Throwing		UMETA(DisplayName = "Throwing"),
-};
-*/
 //these are input bindings
 DECLARE_MULTICAST_DELEGATE(FInteractionStartRequest);
 DECLARE_MULTICAST_DELEGATE(FInteractionCancelRequest);
@@ -54,8 +41,8 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;   //overide
 	
-	UFUNCTION(BlueprintCallable, Category = "Abstraction")
-		void SetOnFire(float BaseDamage, float DamageTotalTime, float TakeDamageInterval);
+	//UFUNCTION(BlueprintCallable, Category = "Abstraction")
+	//	void SetOnFire(float BaseDamage, float DamageTotalTime, float TakeDamageInterval);
 	
 	//Item Pickup //////////////////////////////////
 	UFUNCTION(BlueprintCallable)
@@ -73,42 +60,9 @@ public:
 	FInteractionStartRequest OnInteractionStartRequested;
 	FInteractionCancelRequest OnInteractionCancelRequested;
 
-	//THROW BINDINGS 
-/*
-	//setting the triggers to bindings
-	void RequestThrowObject();
-	void RequestPullObject(AWeponProjectile* InWeponProjectile);
-	void RequestPullObject();
 
-	void ProcessTraceResult(const FHitResult& HitResult);
-
-
-	void RequestStopPullObject();
-	void ResetThrowableObject();
-
-	void RequestUseObject();
-
-	void OnThrowableAttached(AWeponProjectile* InWeponProjectile);
-//
-	bool CanThrowObject() const { return CharacterThrowState == ECharacterThrowState::Attached; }
-
-	UFUNCTION(BlueprintPure)
-		bool IsPullingObject() const { return CharacterThrowState == ECharacterThrowState::RequestingPull || CharacterThrowState == ECharacterThrowState::Pulling; }
-
-	UFUNCTION(BlueprintPure)
-		bool IsThrowing() const { return CharacterThrowState == ECharacterThrowState::Throwing; }
-
-	UFUNCTION(BlueprintPure)
-		ECharacterThrowState GetCharacterThrowState() const { return CharacterThrowState; }
-
-	//where throw happens 
-	//UFUNCTION()
-	//	void OnNotifyBeginReceived(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
-	*/
-	//	
 
 	//Controller Has Look/turned 
-
 	UFUNCTION(BlueprintImplementableEvent)
 		void HasLookedUp();
 	UFUNCTION(BlueprintImplementableEvent)
@@ -157,12 +111,8 @@ protected:
 
 	APlayerController* PC;
 
-	/*//////////////////////////////////   */
-
 	UPROPERTY(EditAnywhere, Category = "Effects")
 		TSubclassOf<UMatineeCameraShake> CamShake;
-
-	//////////////////////////////////////////
 
 	// Force Feedback values.
 	UPROPERTY(EditAnywhere, Category = "Force Feedback")
@@ -170,8 +120,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Force Feedback")
 		float ForceFeedbackDuration = 1.0f;
 
-	
-	
 	//bool bIsStunned = false;
 	//bool bIsSprinting = false;
 
@@ -183,18 +131,69 @@ protected:
 
 
 	private:
-	//UPROPERTY()
-	//	AWeponProjectile* WeponProjectile;
 
-
-	//Expective Implementation bc BLueprint Native
-	//void ApplyEffect_Implementation(EEffectType EffectType, bool bIsBuff) override;
-
-	//void EndEffect();
-
-	//bool bIsUnderEffect = false;
-	//bool bIsEffectBuff = false;
-
-	//float DefaultEffectCooldown = 5.0f;
-	//float EffectCoolDOwn = 0.0f;
 };
+
+//class AWeponProjectile;
+
+//Throwing enum G
+/*
+UENUM(BlueprintType)
+enum class ECharacterThrowState : uint8
+{
+	None			UMETA(DisplayName = "None"),
+	RequestingPull	UMETA(DisplayName = "RequestingPull"),
+	Pulling			UMETA(DisplayName = "Pulling"),
+	Attached		UMETA(DisplayName = "Attached"),
+	Throwing		UMETA(DisplayName = "Throwing"),
+};
+*/
+
+//UPROPERTY()
+//	AWeponProjectile* WeponProjectile;
+
+
+//Expective Implementation bc BLueprint Native
+//void ApplyEffect_Implementation(EEffectType EffectType, bool bIsBuff) override;
+
+//void EndEffect();
+
+//bool bIsUnderEffect = false;
+//bool bIsEffectBuff = false;
+
+//float DefaultEffectCooldown = 5.0f;
+//float EffectCoolDOwn = 0.0f;
+
+//THROW BINDINGS 
+/*
+	//setting the triggers to bindings
+	void RequestThrowObject();
+	void RequestPullObject(AWeponProjectile* InWeponProjectile);
+	void RequestPullObject();
+
+	void ProcessTraceResult(const FHitResult& HitResult);
+
+
+	void RequestStopPullObject();
+	void ResetThrowableObject();
+
+	void RequestUseObject();
+
+	void OnThrowableAttached(AWeponProjectile* InWeponProjectile);
+//
+	bool CanThrowObject() const { return CharacterThrowState == ECharacterThrowState::Attached; }
+
+	UFUNCTION(BlueprintPure)
+		bool IsPullingObject() const { return CharacterThrowState == ECharacterThrowState::RequestingPull || CharacterThrowState == ECharacterThrowState::Pulling; }
+
+	UFUNCTION(BlueprintPure)
+		bool IsThrowing() const { return CharacterThrowState == ECharacterThrowState::Throwing; }
+
+	UFUNCTION(BlueprintPure)
+		ECharacterThrowState GetCharacterThrowState() const { return CharacterThrowState; }
+
+	//where throw happens
+	//UFUNCTION()
+	//	void OnNotifyBeginReceived(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
+	*/
+	//	

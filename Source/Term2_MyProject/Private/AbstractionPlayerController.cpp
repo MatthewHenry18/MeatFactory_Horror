@@ -53,6 +53,7 @@ void AAbstractionPlayerController::RequestLookUp(float AxisValue)
 {
 	AddPitchInput(AxisValue * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 	
+	
 	if (AAbstractionPlayerCharacter* AbstractionPlayerCharacter = Cast<AAbstractionPlayerCharacter>(GetCharacter()))
 	{
 

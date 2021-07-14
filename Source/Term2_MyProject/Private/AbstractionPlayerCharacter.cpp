@@ -4,16 +4,16 @@
 //tantrum
 //
 #include "GameFramework/CharacterMovementComponent.h"
-#include "Kismet/GameplayStatics.h"
-#include "DrawDebugHelpers.h"
+//#include "Kismet/GameplayStatics.h"
+//#include "DrawDebugHelpers.h"
 //
 #include "AbstractionPlayerController.h"
-#include "WeponProjectile.h"
+//#include "WeponProjectile.h"
 //
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/DamageType.h"
 #include "HealthComponent.h"
-#include "Particles/ParticleSystemComponent.h"
+//#include "Particles/ParticleSystemComponent.h"
 #include "Components/InputComponent.h"
 #include "DamageHandlerComponent.h"
 
@@ -34,8 +34,8 @@ AAbstractionPlayerCharacter::AAbstractionPlayerCharacter(const FObjectInitialize
 	DamageHandlerComponent = CreateDefaultSubobject<UDamageHandlerComponent>(TEXT("DamageHandlerComponent"));
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthCmponent"));
 
-	ParticleSystemComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particle System"));
-	ParticleSystemComponent->SetupAttachment(RootComponent);
+	//ParticleSystemComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particle System"));
+	//ParticleSystemComponent->SetupAttachment(RootComponent);
 	//
 	//bReplicates = true;
 	//SetReplicateMovement(true);
@@ -59,22 +59,6 @@ void AAbstractionPlayerCharacter::BeginPlay()
 void AAbstractionPlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
-	//Interface Effects /////////////
-	//if (bIsUnderEffect)
-	//{
-	//	if (EffectCoolDOwn > 0)
-	//	{
-	//		EffectCoolDOwn -= DeltaTime;
-	//	}
-	//	else
-	//	{
-	//		bIsUnderEffect = false;
-	//		EffectCoolDOwn = DefaultEffectCooldown;
-	//		EndEffect();
-	//	}
-	//}
-	//////////////////////////////////
 }
 
 // Called to bind functionality to input
@@ -128,13 +112,13 @@ float AAbstractionPlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent c
 	return Damage;
 }
 
-void AAbstractionPlayerCharacter::SetOnFire(float BaseDamage, float DamageTotalTime, float TakeDamageInterval)
-{
-	if (DamageHandlerComponent)
-	{
-		DamageHandlerComponent->TakeFireDamage(BaseDamage, DamageTotalTime, TakeDamageInterval);
-	}
-}
+//void AAbstractionPlayerCharacter::SetOnFire(float BaseDamage, float DamageTotalTime, float TakeDamageInterval)
+//{
+//	if (DamageHandlerComponent)
+//	{
+//		DamageHandlerComponent->TakeFireDamage(BaseDamage, DamageTotalTime, TakeDamageInterval);
+//	}
+//}
 
 //Death Fubnction
 void AAbstractionPlayerCharacter::OnDeath(bool IsFellOut)
@@ -158,6 +142,19 @@ void AAbstractionPlayerCharacter::InteractionCancelRequested()
 {
 	OnInteractionCancelRequested.Broadcast();
 }
+
+//------------------------Item pickup-----------------------------//
+void AAbstractionPlayerCharacter::HandleItemCollected()
+{
+	ItemsCollected++;
+	// Play Effects here.
+	PC->PlayerCameraManager->PlayCameraShake(CamShake, 1.0f);
+	PC->PlayDynamicForceFeedback(ForceFeedbackIntensity, ForceFeedbackDuration, true, false, true, false,
+		EDynamicForceFeedbackAction::Start);
+
+	ItemCollected();
+}
+
 
 //Has Looked and turned -> BP Implemented
 
@@ -323,17 +320,7 @@ void AAbstractionPlayerCharacter::RequestUseObject()
 */
 
 
-//------------------------Item pickup-----------------------------//
-void AAbstractionPlayerCharacter::HandleItemCollected()
-{
-	ItemsCollected++;
-	// Play Effects here.
-	PC->PlayerCameraManager->PlayCameraShake(CamShake, 1.0f);
-	PC->PlayDynamicForceFeedback(ForceFeedbackIntensity, ForceFeedbackDuration, true, false, true, false,
-		EDynamicForceFeedbackAction::Start);
 
-	ItemCollected();
-}
 
 //interact interface Effect 
 //void AAbstractionPlayerCharacter::ApplyEffect_Implementation(EEffectType EffectType, bool bIsBuff)
@@ -345,3 +332,18 @@ void AAbstractionPlayerCharacter::HandleItemCollected()
 //{
 	
 //}
+//Interface Effects  inside tick /////////////
+	//if (bIsUnderEffect)
+	//{
+	//	if (EffectCoolDOwn > 0)
+	//	{
+	//		EffectCoolDOwn -= DeltaTime;
+	//	}
+	//	else
+	//	{
+	//		bIsUnderEffect = false;
+	//		EffectCoolDOwn = DefaultEffectCooldown;
+	//		EndEffect();
+	//	}
+	//}
+	//////////////////////////////////
