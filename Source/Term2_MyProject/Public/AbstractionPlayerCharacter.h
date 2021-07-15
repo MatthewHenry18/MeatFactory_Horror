@@ -41,8 +41,8 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;   //overide
 	
-	//UFUNCTION(BlueprintCallable, Category = "Abstraction")
-	//	void SetOnFire(float BaseDamage, float DamageTotalTime, float TakeDamageInterval);
+	UFUNCTION(BlueprintCallable, Category = "Abstraction")
+	void SetOnFire(float BaseDamage, float DamageTotalTime, float TakeDamageInterval);
 	
 	//Item Pickup //////////////////////////////////
 	UFUNCTION(BlueprintCallable)

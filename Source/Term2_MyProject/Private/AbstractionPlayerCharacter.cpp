@@ -13,7 +13,7 @@
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/DamageType.h"
 #include "HealthComponent.h"
-//#include "Particles/ParticleSystemComponent.h"
+#include "Particles/ParticleSystemComponent.h"      // dont need bc damage handler has p system
 #include "Components/InputComponent.h"
 #include "DamageHandlerComponent.h"
 
@@ -34,8 +34,8 @@ AAbstractionPlayerCharacter::AAbstractionPlayerCharacter(const FObjectInitialize
 	DamageHandlerComponent = CreateDefaultSubobject<UDamageHandlerComponent>(TEXT("DamageHandlerComponent"));
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthCmponent"));
 
-	//ParticleSystemComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particle System"));
-	//ParticleSystemComponent->SetupAttachment(RootComponent);
+	ParticleSystemComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particle System"));
+	ParticleSystemComponent->SetupAttachment(RootComponent);
 	//
 	//bReplicates = true;
 	//SetReplicateMovement(true);
@@ -112,13 +112,13 @@ float AAbstractionPlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent c
 	return Damage;
 }
 
-//void AAbstractionPlayerCharacter::SetOnFire(float BaseDamage, float DamageTotalTime, float TakeDamageInterval)
-//{
-//	if (DamageHandlerComponent)
-//	{
-//		DamageHandlerComponent->TakeFireDamage(BaseDamage, DamageTotalTime, TakeDamageInterval);
-//	}
-//}
+void AAbstractionPlayerCharacter::SetOnFire(float BaseDamage, float DamageTotalTime, float TakeDamageInterval)
+{
+	if (DamageHandlerComponent)
+	{
+		DamageHandlerComponent->TakeFireDamage(BaseDamage, DamageTotalTime, TakeDamageInterval);
+	} 
+}
 
 //Death Fubnction
 void AAbstractionPlayerCharacter::OnDeath(bool IsFellOut)
