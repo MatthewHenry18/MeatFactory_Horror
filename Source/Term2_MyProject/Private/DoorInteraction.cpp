@@ -43,6 +43,7 @@ void UDoorInteraction::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 		GetOwner()->SetActorRotation(CurrentRotation);
 		if (TimeRatio >= 1.0f)
 		{
+			//called internally when door is finished opening
 			OnDoorOpen();
 		}
 	}
