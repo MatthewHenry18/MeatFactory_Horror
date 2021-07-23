@@ -45,12 +45,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 		const float GetCurrentHealth() const;
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void OnDeath();
+	//void OnDeath(bool IsFellOut);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	void OnDeath(bool IsFellOut);
+	
 
 	UPROPERTY(EditAnywhere)
 		UHealthComponent* HealthComponent;

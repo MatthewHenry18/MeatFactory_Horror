@@ -40,7 +40,8 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void AEnemyCharacter::FellOutOfWorld(const UDamageType& dmgType)
 {
-	OnDeath(true);
+	OnDeath();
+	//OnDeath(true);
 }
 ////ForAnimation blueprint
 const bool AEnemyCharacter::IsAlive() const
@@ -71,7 +72,8 @@ float AEnemyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 		HealthComponent->TakeDamage(Damage);
 		if (HealthComponent->IsDead())
 		{
-			OnDeath(false);
+			//OnDeath(false);
+			OnDeath();
 		}
 	}
 	return Damage;
@@ -86,8 +88,11 @@ void AEnemyCharacter::SetOnFire(float BaseDamage, float DamageTotalTime, float T
 }
 
 //Death Fubnction
+//-> BP implemented 
+/*
 void AEnemyCharacter::OnDeath(bool IsFellOut)
 {
+
 	//APlayerController* PlayerController = GetController<APlayerController>();
 	//if (PlayerController)
 	//{
@@ -96,3 +101,4 @@ void AEnemyCharacter::OnDeath(bool IsFellOut)
 	//	PlayerController->RestartLevel();
 	//}
 }
+*/
