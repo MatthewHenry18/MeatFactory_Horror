@@ -4,6 +4,7 @@
 #include "DealDamageComponent2.h"
 #include "Components/CapsuleComponent.h"
 #include "AbstractionPlayerCharacter.h"
+#include "EnemyCharacter.h"
 
 
 // Sets default values for this component's properties
@@ -38,10 +39,17 @@ void UDealDamageComponent2::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, 
 		return;
 	}
 
-	AAbstractionPlayerCharacter* PlayerCharacter = Cast<AAbstractionPlayerCharacter>(OtherActor);
+	//AAbstractionPlayerCharacter* PlayerCharacter = Cast<AAbstractionPlayerCharacter>(OtherActor);
+	PlayerCharacter = Cast<AAbstractionPlayerCharacter>(OtherActor);
+	EnemyCharacter = Cast<AEnemyCharacter>(OtherActor);
+
 	if (PlayerCharacter)
 	{
 		PlayerCharacter->SetOnFire(BaseDamage, DamageTotalTime, TakeDamageInterval);
+	}	
+	else if (EnemyCharacter)
+	{
+		EnemyCharacter->SetOnFire(BaseDamage, DamageTotalTime, TakeDamageInterval);
 	}
 }
 

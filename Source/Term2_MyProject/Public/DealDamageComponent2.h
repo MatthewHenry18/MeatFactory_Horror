@@ -8,6 +8,8 @@
 
 //forward declare classes we use
 class UCapsuleComponent;
+class AAbstractionPlayerCharacter;
+class AEnemyCharacter;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TERM2_MYPROJECT_API UDealDamageComponent2 : public UActorComponent
@@ -49,6 +51,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, NoClear)
 		UCapsuleComponent* TriggerCapsule;
+
+	AAbstractionPlayerCharacter* PlayerCharacter = nullptr;
+	AEnemyCharacter* EnemyCharacter = nullptr;
 
 	bool bActive = true;
 		

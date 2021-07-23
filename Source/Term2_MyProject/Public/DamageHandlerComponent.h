@@ -9,6 +9,7 @@
 #include "DamageHandlerComponent.generated.h"
 
 class AAbstractionPlayerCharacter;
+class AEnemyCharacter;
 class UParticleSystem;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -43,7 +44,8 @@ protected:
  
 	TOptional<FDamageInfo> ActiveDamageInfo;
 
-	AAbstractionPlayerCharacter* PlayerCharacter = nullptr;
+	AAbstractionPlayerCharacter* PlayerCharacter;
+	AEnemyCharacter* EnemyCharacter;
 
 	//Holds a critical section object
 	FCriticalSection CriticalSection;

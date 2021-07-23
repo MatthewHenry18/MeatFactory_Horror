@@ -3,6 +3,7 @@
 
 #include "DamageHandlerComponent.h"
 #include "AbstractionPlayerCharacter.h"
+#include "EnemyCharacter.h"
 #include "GameFramework/DamageType.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Misc/ScopeLock.h"
@@ -18,7 +19,9 @@ void UDamageHandlerComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+
 	PlayerCharacter = Cast<AAbstractionPlayerCharacter>(GetOwner());
+	EnemyCharacter = Cast<AEnemyCharacter>(GetOwner());
 }
 
 // Called every frame
@@ -55,6 +58,35 @@ void UDamageHandlerComponent::TickComponent(float DeltaTime, ELevelTick TickType
 			}
 		}
 	}
+	if (EnemyCharacter)
+	{
+		FScopeLock Lock(&CriticalSection);
+		if (ActiveDamageInfo.IsSet())
+		{
+			if (ActiveDamageInfo.GetValue().AccumulatedTime > ActiveDamageInfo.GetValue().Lifetime)
+			{
+				if (EnemyCharacter->ParticleSystemComponent)
+				{
+					EnemyCharacter->ParticleSystemComponent->Deactivate();
+					EnemyCharacter->ParticleSystemComponent->SetTemplate(nullptr);
+				}
+				ActiveDamageInfo.Reset();
+			}
+			else
+			{
+				ActiveDamageInfo.GetValue().AccumulatedTime += DeltaTime;
+				ActiveDamageInfo.GetValue().CurrentIntervalTime += DeltaTime;
+				if (ActiveDamageInfo.GetValue().CurrentIntervalTime > ActiveDamageInfo.GetValue().IntervalTime)
+				{
+					float ModifiedDamage = ActiveDamageInfo.GetValue().BaseDamage / (ActiveDamageInfo.GetValue().Lifetime / ActiveDamageInfo.GetValue().IntervalTime);
+					TSubclassOf<UDamageType> const ValidDamageTypeClass = TSubclassOf<UDamageType>(UDamageType::StaticClass());
+					FDamageEvent DamageEvent(ValidDamageTypeClass);
+					EnemyCharacter->TakeDamage(ModifiedDamage, DamageEvent, nullptr, GetOwner());
+					ActiveDamageInfo.GetValue().CurrentIntervalTime = 0.0f;
+				}
+			}
+		}
+	}
 }
 
 void UDamageHandlerComponent::TakeFireDamage(float BaseDamage, float DamageTotalTime, float TakeDamageInterval)
@@ -78,10 +110,16 @@ void UDamageHandlerComponent::TakeFireDamage(float BaseDamage, float DamageTotal
 		ActiveDamageInfo.GetValue().IntervalTime = TakeDamageInterval;
 		ActiveDamageInfo.GetValue().Lifetime = DamageTotalTime;
 
-		if (FireTemplate && PlayerCharacter->ParticleSystemComponent)
+		if (FireTemplate && PlayerCharacter && PlayerCharacter->ParticleSystemComponent)
 		{
 			PlayerCharacter->ParticleSystemComponent->SetTemplate(FireTemplate);
 			PlayerCharacter->ParticleSystemComponent->Activate(true);
+		}
+
+		if (FireTemplate && EnemyCharacter && EnemyCharacter->ParticleSystemComponent)
+		{
+			EnemyCharacter->ParticleSystemComponent->SetTemplate(FireTemplate);
+			EnemyCharacter->ParticleSystemComponent->Activate(true);
 		}
 	}
 }
