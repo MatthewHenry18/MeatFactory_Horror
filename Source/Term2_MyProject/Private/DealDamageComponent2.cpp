@@ -30,6 +30,7 @@ void UDealDamageComponent2::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, 
 {
 	UE_LOG(LogTemp, Warning, TEXT("UDealDamageComponent::OnOverlapBegin"));
 	
+	
 	if (OtherActor == GetOwner())
 	{
 		return;
@@ -39,7 +40,7 @@ void UDealDamageComponent2::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, 
 		return;
 	}
 
-	//AAbstractionPlayerCharacter* PlayerCharacter = Cast<AAbstractionPlayerCharacter>(OtherActor);
+	
 	PlayerCharacter = Cast<AAbstractionPlayerCharacter>(OtherActor);
 	EnemyCharacter = Cast<AEnemyCharacter>(OtherActor);
 

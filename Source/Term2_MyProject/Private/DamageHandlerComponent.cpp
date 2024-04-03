@@ -45,6 +45,7 @@ void UDamageHandlerComponent::TickComponent(float DeltaTime, ELevelTick TickType
 			}
 			else
 			{
+				//seting dmg info 
 				ActiveDamageInfo.GetValue().AccumulatedTime += DeltaTime;
 				ActiveDamageInfo.GetValue().CurrentIntervalTime += DeltaTime;
 				if (ActiveDamageInfo.GetValue().CurrentIntervalTime > ActiveDamageInfo.GetValue().IntervalTime)

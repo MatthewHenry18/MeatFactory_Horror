@@ -24,14 +24,7 @@ public:
 	void RequestLookUp(float AxisValue);
 	void RequestTurn(float AxisValue);
 	void RequestJump();
-	//throw and pull
-	//void RequestPullObject();
-	//void RequestStopPullObject();
-
-	//void RequestThrowObject(float AxisValue);
-
-
-
+	
 
 	UPROPERTY(EditAnywhere, Category = "Look")
 		float BaseLookUpRate = 90.0f;

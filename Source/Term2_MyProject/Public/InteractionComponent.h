@@ -37,6 +37,7 @@ protected:
 	UFUNCTION()
 		virtual void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {};
 
+	//not currently being used 
 	UFUNCTION(BlueprintCallable)
 		virtual void InteractionRequested() {};
 

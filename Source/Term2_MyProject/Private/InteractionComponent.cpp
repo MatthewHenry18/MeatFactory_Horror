@@ -33,7 +33,8 @@ void UInteractionComponent::BeginPlay()
 	AAbstractionPlayerCharacter* Player = Cast<AAbstractionPlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	if (Player)
 	{
-		//bind to player input
+		//bind to player input   
+		// binds the player brocasted OnIntStartrequest (called in th Playerside IntRequested) to the interaction component Interaction request which can be called through bp 
 		InteractionBinding = Player->OnInteractionStartRequested.AddUObject(this, &UInteractionComponent::InteractionRequested);
 	}	
 }

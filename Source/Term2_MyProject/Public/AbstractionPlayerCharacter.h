@@ -15,7 +15,7 @@ class UHealthComponent;
 class UParticleSystemComponent;
 
 
-//these are input bindings
+//input bindings for interaction - generalised delagate for different object interactions (door, fire, key, boiler switch) 
 DECLARE_MULTICAST_DELEGATE(FInteractionStartRequest);
 DECLARE_MULTICAST_DELEGATE(FInteractionCancelRequest);
 
@@ -26,8 +26,7 @@ class TERM2_MYPROJECT_API AAbstractionPlayerCharacter : public ACharacter//, pub
 
 public:
 	// Sets default values for this character's properties
-	/*Default UObject Constructor*/
-	AAbstractionPlayerCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+	AAbstractionPlayerCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); 
 	//AAbstractionPlayerCharacter();
 
 	// Called every frame
@@ -55,6 +54,7 @@ public:
 		int ItemsCollected = 0;
 	//-////////////////////////////////////////////////
 
+	//setuo but not being used 
 	//bindings, a hack atm as the interactble components in the game world get the player and sign themselves up to these events
 	//to know when the player has pressed the input binding for interacting
 	FInteractionStartRequest OnInteractionStartRequested;
@@ -62,7 +62,7 @@ public:
 
 
 
-	//Controller Has Look/turned 
+	//Controller Has Look/turned - for bp use
 	UFUNCTION(BlueprintImplementableEvent)
 		void HasLookedUp();
 	UFUNCTION(BlueprintImplementableEvent)
@@ -90,9 +90,7 @@ public:
 		const float GetCurrentHealth() const;
 	//
 	//UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_CharacterThrowState, Category = "Throw")
-	//	UPROPERTY(VisibleAnywhere, /*replicated, */ Category = "Throw")
-	//	ECharacterThrowState CharacterThrowState = ECharacterThrowState::None;
-	///
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -119,9 +117,6 @@ protected:
 		float ForceFeedbackIntensity = 1.0f;
 	UPROPERTY(EditAnywhere, Category = "Force Feedback")
 		float ForceFeedbackDuration = 1.0f;
-
-	//bool bIsStunned = false;
-	//bool bIsSprinting = false;
 
 	float MaxWalkSpeed = 0.0f;
 

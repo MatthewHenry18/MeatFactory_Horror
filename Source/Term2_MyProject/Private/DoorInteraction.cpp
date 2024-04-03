@@ -57,11 +57,7 @@ void UDoorInteraction::OpenDoor()
 	{
 		return;
 	}
-	//
-	//if (AudioComponent)
-	//{
-	//	AudioComponent->Play();
-	//}
+
 
 	DoorState = EDoorState::DS_Opening;
 	CurrentRotationTime = 0.0f;

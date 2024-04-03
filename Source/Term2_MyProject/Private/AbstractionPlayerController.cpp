@@ -21,11 +21,7 @@ void AAbstractionPlayerController::SetupInputComponent()
 		InputComponent->BindAxis(TEXT("LookUp"), this, &AAbstractionPlayerController::RequestLookUp);
 		InputComponent->BindAxis(TEXT("Turn"), this, &AAbstractionPlayerController::RequestTurn);
 
-		//pull + THrow
-		//InputComponent->BindAction(TEXT("PullObject"), EInputEvent::IE_Pressed, this, &AAbstractionPlayerController::RequestPullObject);
-		//InputComponent->BindAction(TEXT("PullObject"), EInputEvent::IE_Released, this, &AAbstractionPlayerController::RequestStopPullObject);
-
-		//InputComponent->BindAxis(TEXT("ThrowObject"), this, &AAbstractionPlayerController::RequestThrowObject);
+		
 	}
 }
 
@@ -52,11 +48,10 @@ void AAbstractionPlayerController::RequestMoveRight(float AxisValue)
 void AAbstractionPlayerController::RequestLookUp(float AxisValue)
 {
 	AddPitchInput(AxisValue * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
-	
-	
+		
 	if (AAbstractionPlayerCharacter* AbstractionPlayerCharacter = Cast<AAbstractionPlayerCharacter>(GetCharacter()))
 	{
-
+		//bp 
 		AbstractionPlayerCharacter->HasLookedUp();
 	}
 }
@@ -67,7 +62,7 @@ void AAbstractionPlayerController::RequestTurn(float AxisValue)
 
 	if (AAbstractionPlayerCharacter* AbstractionPlayerCharacter = Cast<AAbstractionPlayerCharacter>(GetCharacter()))
 	{
-
+		//bp utility 
 		AbstractionPlayerCharacter->HasTurned();
 	}
 }
@@ -80,45 +75,3 @@ void AAbstractionPlayerController::RequestJump()
 		GetCharacter()->Jump();
 	}
 }
-/*
-void AAbstractionPlayerController::RequestPullObject()
-{
-
-	if (AAbstractionPlayerCharacter* AbstractionPlayerCharacter = Cast<AAbstractionPlayerCharacter>(GetCharacter()))
-	{
-
-		AbstractionPlayerCharacter->RequestPullObject();
-	}
-}
-
-void AAbstractionPlayerController::RequestStopPullObject()
-{
-	if (AAbstractionPlayerCharacter* AbstractionPlayerCharacter = Cast<AAbstractionPlayerCharacter>(GetCharacter()))
-	{
-		AbstractionPlayerCharacter->RequestStopPullObject();
-	}
-}
-
-void AAbstractionPlayerController::RequestThrowObject(float AxisValue)
-{
-	if (AAbstractionPlayerCharacter* AbstractionPlayerCharacter = Cast<AAbstractionPlayerCharacter>(GetCharacter()))
-	{
-		if (AbstractionPlayerCharacter->CanThrowObject()) 
-		{
-			float currentDelta = AxisValue - LastAxis;
-
-			LastAxis = AxisValue;
-				const bool IsFLick = fabs(currentDelta) > FlickThreshold;
-				if (IsFLick)
-				{
-					AbstractionPlayerCharacter->RequestThrowObject();
-				}
-		}
-		else
-		{
-			LastAxis = 0.0f;
-		}
-	}
-	//on notify begin recieved 
-}
-*/
